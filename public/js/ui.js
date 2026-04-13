@@ -4,14 +4,24 @@
 
 // ===== SECTION NAVIGATION =====
 function showSection(id) {
-    ['home', 'restaurants', 'menu', 'orders'].forEach(s => {
+    if (event && event.preventDefault) event.preventDefault();
+    const sections = ['home', 'restaurants', 'menu', 'orders'];
+    sections.forEach(s => {
         const el = document.getElementById(s);
-        if (el) el.style.display = (s === id) ? 'block' : 'none';
+        if (!el) return;
+        if (s === id) {
+            el.style.setProperty('display', 'block', 'important');
+            el.style.setProperty('visibility', 'visible', 'important');
+            el.style.setProperty('opacity', '1', 'important');
+        } else {
+            el.style.setProperty('display', 'none', 'important');
+        }
     });
-    window.scrollTo({ top: 0, behavior: 'smooth' });
-    if (id === 'restaurants' && state.restaurants.length > 0) renderRestaurants();
+    window.scrollTo(0, 0);
+    if (id === 'restaurants') renderRestaurants();
     if (id === 'orders') fetchOrders();
 }
+
 
 // ===== RESTAURANTS RENDERING =====
 function renderHomeRestaurants() {
@@ -70,7 +80,7 @@ function renderRestaurants() {
 
 function restCardHTML(r) {
     return `
-    <div class="rest-card" onclick="viewRestaurant(${r.id}, '${r.name.replace(/'/g,"\\'")}', '${r.rating}', '${r.location.replace(/'/g,"\\'")}')">
+    <div class="rest-card" data-rest-id="${r.id}">
         <div class="rest-card-img-wrap">
             <img src="${r.image}" alt="${r.name}" loading="lazy"/>
             ${r.offer ? `<div class="rest-offer-ribbon">${r.offer}</div>` : ''}
@@ -93,13 +103,15 @@ function restCardHTML(r) {
     </div>`;
 }
 
-function viewRestaurant(id, name, rating, location) {
-    state.currentRestaurant = state.restaurants.find(r => r.id === id);
-    document.getElementById('restaurant-name-title').textContent = name;
-    document.getElementById('rest-rating').textContent = rating;
-    document.getElementById('rest-location').textContent = location;
+function viewRestaurant(id) {
+    const r = state.restaurants.find(x => x.id === parseInt(id));
+    if (!r) return;
+    state.currentRestaurant = r;
+    document.getElementById('restaurant-name-title').textContent = r.name;
+    document.getElementById('rest-rating').textContent = r.rating;
+    document.getElementById('rest-location').textContent = r.location;
     showSection('menu');
-    loadMenu(id);
+    loadMenu(r.id);
 }
 
 // ===== MENU RENDERING =====
@@ -439,6 +451,22 @@ function handleHeroSearch(val) {
 }
 
 document.addEventListener('DOMContentLoaded', () => {
+    // ===== DELEGATED CLICK: Restaurant Cards =====
+    document.addEventListener('click', e => {
+        const card = e.target.closest('.rest-card[data-rest-id]');
+        if (card) {
+            const id = parseInt(card.dataset.restId);
+            viewRestaurant(id);
+        }
+        const sri = e.target.closest('.search-result-item[data-rest-id]');
+        if (sri) {
+            const id = parseInt(sri.dataset.restId);
+            document.getElementById('search-results').style.display = 'none';
+            viewRestaurant(id);
+        }
+    });
+
+    // ===== NAV SEARCH =====
     const navInput = document.getElementById('nav-search-input');
     if (navInput) {
         navInput.addEventListener('input', e => {
@@ -453,7 +481,7 @@ document.addEventListener('DOMContentLoaded', () => {
             if (!matches.length) { resultsEl.style.display = 'none'; return; }
             resultsEl.style.display = 'block';
             resultsEl.innerHTML = matches.map(r => `
-                <div class="search-result-item" onclick="viewRestaurant(${r.id},'${r.name.replace(/'/g,"\\'")}','${r.rating}','${r.location.replace(/'/g,"\\'")}')">
+                <div class="search-result-item" data-rest-id="${r.id}">
                     <span class="sri-emoji">🍽️</span>
                     <div class="sri-info">
                         <div class="sri-name">${r.name}</div>
