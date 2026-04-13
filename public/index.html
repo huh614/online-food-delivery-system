@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>FoodLite | Premium Food Delivery</title>
+    <link rel="stylesheet" href="styles.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+</head>
+<body>
+    <nav class="glass">
+        <div class="logo">FOOD<span>LITE</span></div>
+        <div class="nav-links">
+            <a href="#" onclick="showSection('home')">Home</a>
+            <a href="#" onclick="showSection('restaurants')">Restaurants</a>
+            <a href="#" onclick="showSection('orders')">My Orders</a>
+            <a href="#" id="auth-link" onclick="toggleAuth()">Login</a>
+        </div>
+        <div class="cart-icon" onclick="toggleCart()">
+            <i class="fas fa-shopping-bag"></i>
+            <span id="cart-count">0</span>
+        </div>
+    </nav>
+
+    <main>
+        <!-- Home Section -->
+        <section id="home" class="hero">
+            <div class="hero-content animate-in">
+                <h1>Hungry? We've Got <span>Premium</span> Flavors.</h1>
+                <p>Order from the best restaurants in town with ultra-fast delivery and a crazy sleek experience.</p>
+                <div style="margin-top: 2rem;">
+                    <button class="btn-primary" onclick="showSection('restaurants')">Order Now</button>
+                    <button class="btn-primary" style="background: transparent; border: 1px solid white;" onclick="showSection('features')">Explore Features</button>
+                </div>
+            </div>
+        </section>
+
+        <!-- Restaurants Section -->
+        <section id="restaurants" class="container" style="display: none;">
+            <h2 style="font-size: 2.5rem; margin-bottom: 2rem;">Popular <span>Restaurants</span></h2>
+            <div id="restaurant-grid" class="grid">
+                <!-- Loaded via JS -->
+            </div>
+        </section>
+
+        <!-- Menu Section -->
+        <section id="menu" class="container" style="display: none;">
+            <button class="btn-primary" style="margin-bottom: 2rem;" onclick="showSection('restaurants')">
+                <i class="fas fa-arrow-left"></i> Back
+            </button>
+            <h2 id="restaurant-name-title" style="font-size: 2.5rem; margin-bottom: 2rem;">Menu</h2>
+            <div id="menu-grid" class="grid">
+                <!-- Loaded via JS -->
+            </div>
+        </section>
+
+        <!-- Orders Section -->
+        <section id="orders" class="container" style="display: none;">
+            <h2 style="font-size: 2.5rem; margin-bottom: 2rem;">Your <span>Orders</span></h2>
+            <div id="orders-list" class="grid">
+                <!-- Loaded via JS -->
+            </div>
+        </section>
+
+        <!-- Auth Modal -->
+        <div id="auth-modal" class="glass" style="display: none; position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%); padding: 3rem; border-radius: 2rem; z-index: 3000; width: 400px;">
+            <h2 id="auth-title" style="margin-bottom: 1.5rem;">Login</h2>
+            <input type="email" id="auth-email" placeholder="Email" class="glass" style="width: 100%; padding: 1rem; border-radius: 1rem; margin-bottom: 1rem; color: white;">
+            <input type="password" id="auth-password" placeholder="Password" class="glass" style="width: 100%; padding: 1rem; border-radius: 1rem; margin-bottom: 1.5rem; color: white;">
+            <button class="btn-primary" style="width: 100%;" onclick="handleAuth()">Submit</button>
+            <p style="text-align: center; margin-top: 1rem; cursor: pointer;" onclick="toggleAuthMode()">New here? Create account</p>
+        </div>
+    </main>
+
+    <!-- Cart Sidebar -->
+    <div id="cart-sidebar" class="cart-sidebar">
+        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 2rem;">
+            <h2>Your Bag</h2>
+            <i class="fas fa-times" onclick="toggleCart()" style="cursor: pointer;"></i>
+        </div>
+        <div id="cart-items" style="flex: 1; overflow-y: auto;">
+            <!-- Loaded via JS -->
+        </div>
+        <div id="cart-footer" style="padding-top: 2rem; border-top: 1px solid rgba(255,255,255,0.1);">
+            <div style="display: flex; justify-content: space-between; margin-bottom: 1.5rem;">
+                <span>Total</span>
+                <span id="cart-total">$0.00</span>
+            </div>
+            <button class="btn-primary" style="width: 100%;" onclick="checkout()">Checkout</button>
+        </div>
+    </div>
+
+    <script src="js/app.js"></script>
+    <script src="js/ui.js"></script>
+</body>
+</html>
