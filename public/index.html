@@ -3,114 +3,504 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>FoodLite | Premium Food Delivery</title>
+    <meta name="description" content="FoodRush - Order from the best restaurants near you. Fast delivery, live tracking, exclusive deals.">
+    <title>FoodRush | Order Food Online – Fast Delivery & Best Restaurants</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
     <link rel="stylesheet" href="styles.css">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
 </head>
 <body>
-    <nav class="glass">
-        <div class="logo">FOOD<span>LITE</span></div>
-        <div class="nav-links">
-            <a href="#" onclick="showSection('home')">Home</a>
-            <a href="#" onclick="showSection('restaurants')">Restaurants</a>
-            <a href="#" onclick="showSection('orders')">My Orders</a>
-            <a href="#" id="auth-link" onclick="toggleAuth()">Login</a>
+
+    <!-- =============== PROMO MARQUEE =============== -->
+    <div class="promo-bar" id="promo-bar">
+        <div class="promo-track">
+            <span>🔥 50% OFF on first order – Use code <strong>RUSH50</strong></span>
+            <span>🛵 Free delivery on orders above ₹299</span>
+            <span>🎉 New restaurants added daily!</span>
+            <span>⚡ Lightning fast delivery – 30 min or FREE</span>
+            <span>🔥 50% OFF on first order – Use code <strong>RUSH50</strong></span>
+            <span>🛵 Free delivery on orders above ₹299</span>
+            <span>🎉 New restaurants added daily!</span>
+            <span>⚡ Lightning fast delivery – 30 min or FREE</span>
         </div>
-        <div class="cart-icon" onclick="toggleCart()">
-            <i class="fas fa-shopping-bag"></i>
-            <span id="cart-count">0</span>
+    </div>
+
+    <!-- =============== NAVBAR =============== -->
+    <nav class="navbar" id="navbar">
+        <div class="nav-inner">
+            <div class="nav-logo" onclick="showSection('home')">
+                <span class="logo-icon">🍜</span>
+                <span class="logo-text">Food<span class="logo-accent">Rush</span></span>
+            </div>
+
+            <div class="nav-search" id="nav-search">
+                <i class="fas fa-search"></i>
+                <input type="text" id="nav-search-input" placeholder="Search for food, restaurants...">
+                <div class="search-results" id="search-results"></div>
+            </div>
+
+            <div class="nav-actions">
+                <a href="#" class="nav-link" onclick="showSection('restaurants')">
+                    <i class="fas fa-utensils"></i> Restaurants
+                </a>
+                <a href="#" class="nav-link" onclick="showSection('orders')" id="orders-nav-link">
+                    <i class="fas fa-receipt"></i> Orders
+                </a>
+                <button class="cart-btn" onclick="toggleCart()" id="cart-btn">
+                    <i class="fas fa-shopping-bag"></i>
+                    <span class="cart-badge" id="cart-count">0</span>
+                </button>
+                <button class="auth-btn" id="auth-btn" onclick="openAuthModal()">
+                    <i class="fas fa-user"></i>
+                    <span id="auth-btn-text">Login</span>
+                </button>
+            </div>
         </div>
     </nav>
 
+    <!-- =============== MAIN =============== -->
     <main>
-        <!-- Home Section -->
-        <section id="home" class="hero">
-            <div class="hero-content animate-in">
-                <h1>Discover the best food & drinks</h1>
-                <p>Order from the best restaurants in town with ultra-fast delivery and a crazy sleek experience.</p>
-                <div style="margin-top: 2rem; display: flex; justify-content: center; gap: 1rem;">
-                    <div style="background: white; padding: 0.5rem; border-radius: 2rem; display: flex; align-items: center; width: 100%; max-width: 500px; box-shadow: 0 4px 12px rgba(0,0,0,0.1);">
-                        <i class="fas fa-search" style="margin: 0 1rem; color: var(--text-muted);"></i>
-                        <input type="text" placeholder="Search for restaurant, cuisine or a dish" style="border: none; outline: none; flex: 1; font-size: 1rem; padding: 0.5rem;">
-                        <button class="btn-primary" onclick="showSection('restaurants')">Search</button>
+
+        <!-- ===== HOME SECTION ===== -->
+        <section id="home" class="section-active">
+
+            <!-- Hero -->
+            <div class="hero">
+                <div class="hero-bg">
+                    <div class="hero-blob hero-blob-1"></div>
+                    <div class="hero-blob hero-blob-2"></div>
+                    <div class="hero-blob hero-blob-3"></div>
+                </div>
+                <div class="hero-content">
+                    <div class="hero-tag">
+                        <i class="fas fa-bolt"></i> Fastest delivery in town
+                    </div>
+                    <h1 class="hero-title">
+                        Cravings? <span class="text-gradient">Satisfied.</span><br>
+                        In <span class="text-gradient">30 minutes.</span>
+                    </h1>
+                    <p class="hero-subtitle">
+                        Over 500+ restaurants, 10,000+ dishes. Track live. Eat happy.
+                    </p>
+                    <div class="hero-search-bar">
+                        <div class="hero-search-location">
+                            <i class="fas fa-location-dot"></i>
+                            <span id="hero-location-text">Mumbai, 400001</span>
+                            <i class="fas fa-chevron-down"></i>
+                        </div>
+                        <div class="hero-search-divider"></div>
+                        <input type="text" id="hero-search" placeholder="Search for pizza, biryani, burgers…" oninput="handleHeroSearch(this.value)" autocomplete="off">
+                        <button class="hero-search-btn" onclick="showSection('restaurants')">
+                            <i class="fas fa-search"></i> Search
+                        </button>
+                    </div>
+                    <div class="hero-tags">
+                        <span class="hero-tag-chip" onclick="filterByCategory('Pizza')">🍕 Pizza</span>
+                        <span class="hero-tag-chip" onclick="filterByCategory('Burgers')">🍔 Burgers</span>
+                        <span class="hero-tag-chip" onclick="filterByCategory('Sushi')">🍣 Sushi</span>
+                        <span class="hero-tag-chip" onclick="filterByCategory('Healthy')">🥗 Healthy</span>
+                        <span class="hero-tag-chip" onclick="filterByCategory('Desserts')">🍰 Desserts</span>
+                    </div>
+                </div>
+                <div class="hero-visual">
+                    <div class="hero-food-ring">
+                        <div class="food-orbit">
+                            <span class="food-emoji orbit-item-1">🍕</span>
+                            <span class="food-emoji orbit-item-2">🍔</span>
+                            <span class="food-emoji orbit-item-3">🍜</span>
+                            <span class="food-emoji orbit-item-4">🌮</span>
+                            <span class="food-emoji orbit-item-5">🥗</span>
+                            <span class="food-emoji orbit-item-6">🍣</span>
+                        </div>
+                        <div class="hero-center-card">
+                            <span class="hero-center-emoji">🛵</span>
+                            <div class="hero-center-text">30 min</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Stats Bar -->
+            <div class="stats-bar">
+                <div class="stat-item">
+                    <div class="stat-number" data-count="500">0</div>
+                    <div class="stat-label">Restaurants</div>
+                </div>
+                <div class="stat-item">
+                    <div class="stat-number" data-count="10000">0</div>
+                    <div class="stat-label">Dishes</div>
+                </div>
+                <div class="stat-item">
+                    <div class="stat-number" data-count="50000">0</div>
+                    <div class="stat-label">Happy Orders</div>
+                </div>
+                <div class="stat-item">
+                    <div class="stat-number" data-count="30">0</div>
+                    <div class="stat-label">Min Avg Delivery</div>
+                </div>
+            </div>
+
+            <!-- Categories -->
+            <div class="section-wrap">
+                <div class="section-header">
+                    <h2>What's <span class="text-gradient">on your mind?</span></h2>
+                </div>
+                <div class="categories-scroll">
+                    <div class="category-card active" onclick="filterByCategory('all')" id="cat-all">
+                        <div class="cat-icon">🍽️</div>
+                        <div class="cat-label">All</div>
+                    </div>
+                    <div class="category-card" onclick="filterByCategory('Pizza')" id="cat-pizza">
+                        <div class="cat-icon">🍕</div>
+                        <div class="cat-label">Pizza</div>
+                    </div>
+                    <div class="category-card" onclick="filterByCategory('Burgers')" id="cat-burgers">
+                        <div class="cat-icon">🍔</div>
+                        <div class="cat-label">Burgers</div>
+                    </div>
+                    <div class="category-card" onclick="filterByCategory('Biryani')" id="cat-biryani">
+                        <div class="cat-icon">🍛</div>
+                        <div class="cat-label">Biryani</div>
+                    </div>
+                    <div class="category-card" onclick="filterByCategory('Sushi')" id="cat-sushi">
+                        <div class="cat-icon">🍣</div>
+                        <div class="cat-label">Sushi</div>
+                    </div>
+                    <div class="category-card" onclick="filterByCategory('Healthy')" id="cat-healthy">
+                        <div class="cat-icon">🥗</div>
+                        <div class="cat-label">Healthy</div>
+                    </div>
+                    <div class="category-card" onclick="filterByCategory('Desserts')" id="cat-desserts">
+                        <div class="cat-icon">🍰</div>
+                        <div class="cat-label">Desserts</div>
+                    </div>
+                    <div class="category-card" onclick="filterByCategory('Chinese')" id="cat-chinese">
+                        <div class="cat-icon">🥡</div>
+                        <div class="cat-label">Chinese</div>
+                    </div>
+                    <div class="category-card" onclick="filterByCategory('Beverages')" id="cat-beverages">
+                        <div class="cat-icon">🍹</div>
+                        <div class="cat-label">Drinks</div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Featured Offers -->
+            <div class="section-wrap">
+                <div class="section-header">
+                    <h2>🔥 Exclusive <span class="text-gradient">Deals</span></h2>
+                    <a href="#" class="see-all">See all <i class="fas fa-arrow-right"></i></a>
+                </div>
+                <div class="offers-grid">
+                    <div class="offer-card offer-gradient-1">
+                        <div class="offer-badge">LIMITED</div>
+                        <div class="offer-content">
+                            <div class="offer-title">50% OFF</div>
+                            <div class="offer-sub">On your first order</div>
+                            <div class="offer-code">Code: <strong>RUSH50</strong></div>
+                        </div>
+                        <div class="offer-emoji">🎉</div>
+                    </div>
+                    <div class="offer-card offer-gradient-2">
+                        <div class="offer-badge">TODAY</div>
+                        <div class="offer-content">
+                            <div class="offer-title">FREE Delivery</div>
+                            <div class="offer-sub">Orders above ₹299</div>
+                            <div class="offer-code">Auto applied</div>
+                        </div>
+                        <div class="offer-emoji">🛵</div>
+                    </div>
+                    <div class="offer-card offer-gradient-3">
+                        <div class="offer-badge">HOT</div>
+                        <div class="offer-content">
+                            <div class="offer-title">Flat ₹100</div>
+                            <div class="offer-sub">Use code RUSH100</div>
+                            <div class="offer-code">Min order ₹499</div>
+                        </div>
+                        <div class="offer-emoji">💥</div>
+                    </div>
+                    <div class="offer-card offer-gradient-4">
+                        <div class="offer-badge">NEW</div>
+                        <div class="offer-content">
+                            <div class="offer-title">BOGO Free</div>
+                            <div class="offer-sub">Buy 1 Get 1 on Pizza</div>
+                            <div class="offer-code">Code: BOGO2024</div>
+                        </div>
+                        <div class="offer-emoji">🍕</div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Top Restaurants on Home -->
+            <div class="section-wrap">
+                <div class="section-header">
+                    <h2>Top <span class="text-gradient">Restaurants</span> Near You</h2>
+                    <a href="#" class="see-all" onclick="showSection('restaurants')">View all <i class="fas fa-arrow-right"></i></a>
+                </div>
+                <div class="restaurant-grid" id="home-restaurant-grid">
+                    <!-- Skeleton loaders -->
+                    <div class="rest-skeleton"><div class="skel-img"></div><div class="skel-line"></div><div class="skel-line short"></div></div>
+                    <div class="rest-skeleton"><div class="skel-img"></div><div class="skel-line"></div><div class="skel-line short"></div></div>
+                    <div class="rest-skeleton"><div class="skel-img"></div><div class="skel-line"></div><div class="skel-line short"></div></div>
+                    <div class="rest-skeleton"><div class="skel-img"></div><div class="skel-line"></div><div class="skel-line short"></div></div>
+                </div>
+            </div>
+
+            <!-- Why Us -->
+            <div class="section-wrap why-us">
+                <div class="section-header centered">
+                    <h2>Why choose <span class="text-gradient">FoodRush?</span></h2>
+                    <p class="section-subtitle">We're fast. We're fresh. We deliver happiness.</p>
+                </div>
+                <div class="why-grid">
+                    <div class="why-card">
+                        <div class="why-icon">⚡</div>
+                        <h3>Lightning Fast</h3>
+                        <p>Average delivery in under 30 minutes. We don't like waiting—neither do you.</p>
+                    </div>
+                    <div class="why-card">
+                        <div class="why-icon">🛡️</div>
+                        <h3>Safe & Hygienic</h3>
+                        <p>All partner restaurants are hygiene-certified. Sealed packaging, always fresh.</p>
+                    </div>
+                    <div class="why-card">
+                        <div class="why-icon">💸</div>
+                        <h3>Best Prices</h3>
+                        <p>No hidden charges. Best deals & coupons updated daily for you.</p>
+                    </div>
+                    <div class="why-card">
+                        <div class="why-icon">📍</div>
+                        <h3>Live Tracking</h3>
+                        <p>Track your order in real-time. Know exactly when your food arrives.</p>
+                    </div>
+                </div>
+            </div>
+
+        </section>
+
+        <!-- ===== RESTAURANTS SECTION ===== -->
+        <section id="restaurants" style="display:none;">
+            <div class="page-header-band">
+                <div class="page-header-inner">
+                    <button class="back-btn" onclick="showSection('home')">
+                        <i class="fas fa-arrow-left"></i>
+                    </button>
+                    <div>
+                        <h1 class="page-title">Restaurants Near You</h1>
+                        <p class="page-subtitle" id="restaurants-count">Loading restaurants…</p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="section-wrap">
+                <!-- Filter bar -->
+                <div class="filter-bar">
+                    <input type="text" class="filter-search" id="rest-search" placeholder="🔍  Search restaurants…" oninput="filterRestaurantsUI()">
+                    <div class="filter-chips">
+                        <button class="chip active" onclick="setSort('recommended')" id="sort-recommended">⭐ Recommended</button>
+                        <button class="chip" onclick="setSort('rating')" id="sort-rating">🏆 Top Rated</button>
+                        <button class="chip" onclick="setSort('delivery')" id="sort-delivery">🚀 Fast Delivery</button>
+                        <button class="chip" onclick="setSort('cost-low')" id="sort-cost-low">💰 Cost: Low to High</button>
+                    </div>
+                </div>
+
+                <!-- Grid -->
+                <div class="restaurant-grid" id="restaurant-grid">
+                    <div class="rest-skeleton"><div class="skel-img"></div><div class="skel-line"></div><div class="skel-line short"></div></div>
+                    <div class="rest-skeleton"><div class="skel-img"></div><div class="skel-line"></div><div class="skel-line short"></div></div>
+                    <div class="rest-skeleton"><div class="skel-img"></div><div class="skel-line"></div><div class="skel-line short"></div></div>
+                    <div class="rest-skeleton"><div class="skel-img"></div><div class="skel-line"></div><div class="skel-line short"></div></div>
+                    <div class="rest-skeleton"><div class="skel-img"></div><div class="skel-line"></div><div class="skel-line short"></div></div>
+                    <div class="rest-skeleton"><div class="skel-img"></div><div class="skel-line"></div><div class="skel-line short"></div></div>
+                </div>
+            </div>
+        </section>
+
+        <!-- ===== MENU SECTION ===== -->
+        <section id="menu" style="display:none;">
+            <div class="page-header-band rest-header-band" id="rest-hero-band">
+                <div class="rest-hero-overlay"></div>
+                <div class="page-header-inner rest-header-inner">
+                    <button class="back-btn back-btn-white" onclick="showSection('restaurants')">
+                        <i class="fas fa-arrow-left"></i>
+                    </button>
+                    <div class="rest-hero-info">
+                        <h1 class="page-title white-text" id="restaurant-name-title">Menu</h1>
+                        <div class="rest-meta" id="rest-meta">
+                            <span><i class="fas fa-star star-gold"></i> <span id="rest-rating">4.5</span></span>
+                            <span class="dot-sep">•</span>
+                            <span id="rest-location">City Center</span>
+                            <span class="dot-sep">•</span>
+                            <span><i class="fas fa-clock"></i> 25-35 min</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="section-wrap menu-page">
+                <!-- Menu sidebar + content -->
+                <div class="menu-layout">
+                    <div class="menu-categories-sidebar" id="menu-sidebar">
+                        <h4>Menu</h4>
+                        <ul id="menu-sidebar-links"></ul>
+                    </div>
+                    <div class="menu-content-area">
+                        <!-- Menu search -->
+                        <div class="menu-search-bar">
+                            <i class="fas fa-search"></i>
+                            <input type="text" id="menu-search" placeholder="Search from menu…" oninput="filterMenuItems(this.value)">
+                        </div>
+                        <!-- Menu item groups -->
+                        <div id="menu-groups"></div>
                     </div>
                 </div>
             </div>
         </section>
 
-        <!-- Restaurants Section -->
-        <section id="restaurants" class="container" style="display: none;">
-            <h2 style="font-size: 2.5rem; margin-bottom: 2rem;">Popular <span>Restaurants</span></h2>
-            <div id="restaurant-grid" class="grid">
-                <!-- Loaded via JS -->
+        <!-- ===== ORDERS SECTION ===== -->
+        <section id="orders" style="display:none;">
+            <div class="page-header-band">
+                <div class="page-header-inner">
+                    <button class="back-btn" onclick="showSection('home')">
+                        <i class="fas fa-arrow-left"></i>
+                    </button>
+                    <div>
+                        <h1 class="page-title">Your Orders</h1>
+                        <p class="page-subtitle">Track your deliveries in real-time</p>
+                    </div>
+                </div>
+            </div>
+            <div class="section-wrap">
+                <div id="orders-container">
+                    <div class="empty-state">
+                        <div class="empty-icon">🍽️</div>
+                        <h3>No orders yet</h3>
+                        <p>Browse our restaurants and place your first order!</p>
+                        <button class="btn-primary" onclick="showSection('restaurants')">Order Now</button>
+                    </div>
+                </div>
             </div>
         </section>
 
-        <!-- Menu Section -->
-        <section id="menu" class="container" style="display: none;">
-            <button class="btn-primary" style="margin-bottom: 2rem;" onclick="showSection('restaurants')">
-                <i class="fas fa-arrow-left"></i> Back
-            </button>
-            <h2 id="restaurant-name-title" style="font-size: 2.5rem; margin-bottom: 2rem;">Menu</h2>
-            <div id="menu-grid" class="grid">
-                <!-- Loaded via JS -->
-            </div>
-        </section>
-
-        <!-- Orders Section -->
-        <section id="orders" class="container" style="display: none;">
-            <h2 style="font-size: 2.5rem; margin-bottom: 2rem;">Your <span>Orders</span></h2>
-            <div id="orders-list" class="grid">
-                <!-- Loaded via JS -->
-            </div>
-        </section>
-
-        <!-- Auth Modal -->
-        <div id="auth-modal" class="glass" style="display: none; position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%); padding: 3rem; border-radius: 2rem; z-index: 3000; width: 400px; background: white; box-shadow: 0 20px 40px rgba(0,0,0,0.2);">
-            <div style="display: flex; justify-content: space-between; margin-bottom: 1.5rem;">
-                <h2 id="auth-title">Login</h2>
-                <i class="fas fa-times" onclick="toggleAuth()" style="cursor: pointer; font-size: 1.2rem;"></i>
-            </div>
-            <input type="email" id="auth-email" placeholder="Email" style="width: 100%; padding: 1rem; border-radius: 1rem; border: 1px solid #ccc; margin-bottom: 1rem; outline: none;">
-            <input type="password" id="auth-password" placeholder="Password" style="width: 100%; padding: 1rem; border-radius: 1rem; border: 1px solid #ccc; margin-bottom: 1.5rem; outline: none;">
-            <button class="btn-primary" style="width: 100%;" onclick="handleAuth()">Continue</button>
-            <p style="text-align: center; margin-top: 1.5rem; cursor: pointer; color: var(--text-muted);" onclick="toggleAuthMode()">New here? Create account</p>
-        </div>
-
-        <!-- Checkout Success Modal -->
-        <div id="checkout-success-modal" class="glass" style="display: none; position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%); padding: 3rem; border-radius: 2rem; z-index: 3000; width: 400px; background: white; box-shadow: 0 20px 40px rgba(0,0,0,0.2); text-align: center;">
-            <div style="font-size: 4rem; color: #2ecc71; margin-bottom: 1rem;"><i class="fas fa-check-circle"></i></div>
-            <h2>Order Placed Successfully!</h2>
-            <p style="margin-top: 1rem; color: var(--text-muted);">Your transaction was processed. Tracking your delivery now.</p>
-        </div>
     </main>
 
-    <!-- Cart Sidebar -->
-    <div id="cart-sidebar" class="cart-sidebar">
-        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 2rem;">
-            <h2>Your Bag</h2>
-            <i class="fas fa-times" onclick="toggleCart()" style="cursor: pointer;"></i>
+    <!-- =============== CART SIDEBAR =============== -->
+    <div class="cart-overlay" id="cart-overlay" onclick="toggleCart()"></div>
+    <div class="cart-sidebar" id="cart-sidebar">
+        <div class="cart-header">
+            <div>
+                <h2>Your Bag 🛍️</h2>
+                <p class="cart-sub" id="cart-restaurant-name">—</p>
+            </div>
+            <button class="cart-close-btn" onclick="toggleCart()"><i class="fas fa-times"></i></button>
         </div>
-        <div id="cart-items" style="flex: 1; overflow-y: auto;">
-            <!-- Loaded via JS -->
+        <div class="cart-items-wrap" id="cart-items">
+            <div class="cart-empty-state">
+                <div style="font-size: 3rem; margin-bottom: 1rem;">🛒</div>
+                <h4>Your bag is empty</h4>
+                <p>Add items from a restaurant to get started.</p>
+            </div>
         </div>
-        <div id="cart-footer" style="padding-top: 2rem; border-top: 1px solid rgba(0,0,0,0.1);">
-            <div style="margin-bottom: 1.5rem;">
-                <label style="display: block; margin-bottom: 0.5rem; font-size: 0.9rem; color: var(--text-muted);">Payment Method</label>
-                <select id="payment-mode" style="width: 100%; padding: 0.8rem; border-radius: 0.5rem; border: 1px solid #ccc; outline: none;">
-                    <option value="Credit Card">Credit Card</option>
-                    <option value="UPI">UPI / Google Pay</option>
-                    <option value="Cash on Delivery">Cash on Delivery</option>
+        <div class="cart-footer" id="cart-footer" style="display:none;">
+            <div class="coupon-row" id="coupon-row">
+                <i class="fas fa-tag"></i>
+                <input type="text" id="coupon-input" placeholder="Enter coupon code…" style="flex:1; border:none; background:none; outline:none; font-size:0.95rem;">
+                <button id="coupon-apply-btn" onclick="applyCoupon()">Apply</button>
+            </div>
+            <div class="coupon-msg" id="coupon-msg"></div>
+            <div class="cart-totals">
+                <div class="total-row"><span>Item Total</span><span id="cart-subtotal">₹0</span></div>
+                <div class="total-row"><span>Delivery Fee</span><span id="cart-delivery-fee">₹49</span></div>
+                <div class="total-row discount-row" id="discount-total-row" style="display:none;"><span>Discount 🎉</span><span id="cart-discount">-₹0</span></div>
+                <div class="total-row grand"><span>To Pay</span><span id="cart-total">₹0</span></div>
+            </div>
+            <div class="payment-method-row">
+                <label class="pay-label"><i class="fas fa-credit-card"></i> Payment</label>
+                <select id="payment-mode" class="pay-select">
+                    <option value="Credit Card">💳 Credit Card</option>
+                    <option value="UPI">📱 UPI / GPay</option>
+                    <option value="Cash on Delivery">💵 Cash on Delivery</option>
+                    <option value="Net Banking">🏦 Net Banking</option>
                 </select>
             </div>
-            <div style="display: flex; justify-content: space-between; margin-bottom: 1.5rem; font-weight: 800; font-size: 1.2rem;">
-                <span>Total</span>
-                <span id="cart-total">$0.00</span>
-            </div>
-            <button class="btn-primary" style="width: 100%; font-size: 1.1rem; padding: 1rem;" onclick="checkout()">Place Order</button>
+            <button class="btn-checkout" onclick="checkout()">
+                <i class="fas fa-bolt"></i> Place Order
+            </button>
         </div>
     </div>
 
+    <!-- =============== AUTH MODAL =============== -->
+    <div class="modal-overlay" id="auth-overlay" onclick="closeAuthModal()"></div>
+    <div class="auth-modal" id="auth-modal">
+        <button class="modal-close-btn" onclick="closeAuthModal()"><i class="fas fa-times"></i></button>
+        <div class="auth-logo">🍜 FoodRush</div>
+        <div class="auth-tabs">
+            <button class="auth-tab active" id="auth-tab-login" onclick="switchAuthTab('login')">Login</button>
+            <button class="auth-tab" id="auth-tab-register" onclick="switchAuthTab('register')">Sign Up</button>
+        </div>
+        <div id="auth-login-form">
+            <input type="email" id="auth-email" class="auth-input" placeholder="Email address">
+            <input type="password" id="auth-password" class="auth-input" placeholder="Password">
+            <div class="auth-forgot">Forgot password?</div>
+            <button class="btn-primary full-width" onclick="handleAuth()">Login to FoodRush</button>
+        </div>
+        <div id="auth-register-form" style="display:none;">
+            <input type="text" id="reg-name" class="auth-input" placeholder="Full Name">
+            <input type="email" id="reg-email" class="auth-input" placeholder="Email address">
+            <input type="password" id="reg-password" class="auth-input" placeholder="Create Password">
+            <input type="tel" id="reg-phone" class="auth-input" placeholder="Phone Number">
+            <button class="btn-primary full-width" onclick="handleRegister()">Create Account</button>
+        </div>
+        <div class="auth-divider"><span>OR</span></div>
+        <button class="btn-social"><i class="fab fa-google"></i> Continue with Google</button>
+        <button class="btn-social"><i class="fab fa-apple"></i> Continue with Apple</button>
+    </div>
+
+    <!-- =============== ORDER SUCCESS MODAL =============== -->
+    <div class="modal-overlay" id="success-overlay"></div>
+    <div class="success-modal" id="success-modal">
+        <div class="success-animation">
+            <div class="success-circle">
+                <i class="fas fa-check"></i>
+            </div>
+        </div>
+        <h2>Order Placed! 🎉</h2>
+        <p>Your food is being prepared.</p>
+        <div class="success-tracking">
+            <div class="track-step completed"><i class="fas fa-check-circle"></i> Order Confirmed</div>
+            <div class="track-step active"><i class="fas fa-fire"></i> Being Prepared</div>
+            <div class="track-step"><i class="fas fa-motorcycle"></i> On the Way</div>
+            <div class="track-step"><i class="fas fa-home"></i> Delivered</div>
+        </div>
+        <button class="btn-primary full-width" onclick="closeSuccessModal()">Track Order</button>
+    </div>
+
+    <!-- =============== FLOATING TRACKER =============== -->
+    <div class="floating-tracker" id="floating-tracker" style="display:none;">
+        <div class="ft-header" onclick="toggleFloatingTracker()">
+            <div class="ft-pulse"></div>
+            <span>Live Order <strong id="ft-eta">25 min</strong></span>
+            <i class="fas fa-chevron-up" id="ft-chevron"></i>
+        </div>
+        <div class="ft-body" id="ft-body">
+            <div class="ft-progress">
+                <div class="ft-step completed" id="fts-1"><i class="fas fa-check-circle"></i><span>Confirmed</span></div>
+                <div class="ft-line"><div class="ft-line-fill" id="ftl-1"></div></div>
+                <div class="ft-step" id="fts-2"><i class="fas fa-fire"></i><span>Preparing</span></div>
+                <div class="ft-line"><div class="ft-line-fill" id="ftl-2"></div></div>
+                <div class="ft-step" id="fts-3"><i class="fas fa-motorcycle"></i><span>On the way</span></div>
+                <div class="ft-line"><div class="ft-line-fill" id="ftl-3"></div></div>
+                <div class="ft-step" id="fts-4"><i class="fas fa-home"></i><span>Delivered</span></div>
+            </div>
+            <div class="ft-order-name" id="ft-order-name">Loading…</div>
+        </div>
+    </div>
+
+    <!-- =============== TOAST =============== -->
+    <div class="toast-container" id="toast-container"></div>
+
+    <!-- =============== SCRIPTS =============== -->
     <script src="js/app.js"></script>
     <script src="js/ui.js"></script>
 </body>
