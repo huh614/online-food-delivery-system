@@ -57,7 +57,7 @@ app.get('/api/restaurants/:id/menu', (req, res) => {
 
 // Orders - Create new order
 app.post('/api/orders', (req, res) => {
-    const { user_id, restaurant_id, total_amount, items } = req.body;
+    const { user_id, restaurant_id, total_amount, items, pay_mode } = req.body;
     db.serialize(() => {
         db.run(`INSERT INTO orders (user_id, restaurant_id, total_amount) VALUES (?, ?, ?)`, 
         [user_id, restaurant_id, total_amount], function(err) {
@@ -70,6 +70,12 @@ app.post('/api/orders', (req, res) => {
             });
             stmt.finalize();
 
+            // Insert into Payment
+            db.run(`INSERT INTO payment (order_id, pay_mode, pay_status) VALUES (?, ?, 'completed')`, [order_id, pay_mode || 'Card']);
+            
+            // Insert into Delivery
+            db.run(`INSERT INTO delivery (order_id, status) VALUES (?, 'preparing')`, [order_id]);
+
             res.json({ order_id, message: 'Order placed successfully' });
         });
     });
@@ -77,8 +83,11 @@ app.post('/api/orders', (req, res) => {
 
 // Orders - Get user orders
 app.get('/api/users/:id/orders', (req, res) => {
-    db.all(`SELECT o.*, r.name as restaurant_name FROM orders o 
+    db.all(`SELECT o.*, r.name as restaurant_name, d.status as delivery_status, p.pay_status, p.pay_mode 
+            FROM orders o 
             JOIN restaurants r ON o.restaurant_id = r.id 
+            LEFT JOIN delivery d ON o.id = d.order_id
+            LEFT JOIN payment p ON o.id = p.order_id
             WHERE o.user_id = ? ORDER BY o.date DESC`, [req.params.id], (err, rows) => {
         if (err) return res.status(500).json({ error: err.message });
         res.json(rows);

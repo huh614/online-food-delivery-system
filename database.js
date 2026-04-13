@@ -63,6 +63,25 @@ const initDB = () => {
                 FOREIGN KEY (menu_id) REFERENCES menu(id)
             )`);
 
+            // Delivery Table
+            db.run(`CREATE TABLE IF NOT EXISTS delivery (
+                id INTEGER PRIMARY KEY AUTOINCREMENT,
+                order_id INTEGER,
+                status TEXT DEFAULT 'pending',
+                deli_time DATETIME,
+                FOREIGN KEY (order_id) REFERENCES orders(id)
+            )`);
+
+            // Payment Table
+            db.run(`CREATE TABLE IF NOT EXISTS payment (
+                id INTEGER PRIMARY KEY AUTOINCREMENT,
+                order_id INTEGER,
+                pay_mode TEXT,
+                pay_status TEXT DEFAULT 'pending',
+                pay_date DATETIME DEFAULT CURRENT_TIMESTAMP,
+                FOREIGN KEY (order_id) REFERENCES orders(id)
+            )`);
+
             // Seed initial data if empty
             db.get("SELECT COUNT(*) as count FROM restaurants", (err, row) => {
                 if (row.count === 0) {

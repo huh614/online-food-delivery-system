@@ -26,11 +26,14 @@
         <!-- Home Section -->
         <section id="home" class="hero">
             <div class="hero-content animate-in">
-                <h1>Hungry? We've Got <span>Premium</span> Flavors.</h1>
+                <h1>Discover the best food & drinks</h1>
                 <p>Order from the best restaurants in town with ultra-fast delivery and a crazy sleek experience.</p>
-                <div style="margin-top: 2rem;">
-                    <button class="btn-primary" onclick="showSection('restaurants')">Order Now</button>
-                    <button class="btn-primary" style="background: transparent; border: 1px solid white;" onclick="showSection('features')">Explore Features</button>
+                <div style="margin-top: 2rem; display: flex; justify-content: center; gap: 1rem;">
+                    <div style="background: white; padding: 0.5rem; border-radius: 2rem; display: flex; align-items: center; width: 100%; max-width: 500px; box-shadow: 0 4px 12px rgba(0,0,0,0.1);">
+                        <i class="fas fa-search" style="margin: 0 1rem; color: var(--text-muted);"></i>
+                        <input type="text" placeholder="Search for restaurant, cuisine or a dish" style="border: none; outline: none; flex: 1; font-size: 1rem; padding: 0.5rem;">
+                        <button class="btn-primary" onclick="showSection('restaurants')">Search</button>
+                    </div>
                 </div>
             </div>
         </section>
@@ -63,12 +66,22 @@
         </section>
 
         <!-- Auth Modal -->
-        <div id="auth-modal" class="glass" style="display: none; position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%); padding: 3rem; border-radius: 2rem; z-index: 3000; width: 400px;">
-            <h2 id="auth-title" style="margin-bottom: 1.5rem;">Login</h2>
-            <input type="email" id="auth-email" placeholder="Email" class="glass" style="width: 100%; padding: 1rem; border-radius: 1rem; margin-bottom: 1rem; color: white;">
-            <input type="password" id="auth-password" placeholder="Password" class="glass" style="width: 100%; padding: 1rem; border-radius: 1rem; margin-bottom: 1.5rem; color: white;">
-            <button class="btn-primary" style="width: 100%;" onclick="handleAuth()">Submit</button>
-            <p style="text-align: center; margin-top: 1rem; cursor: pointer;" onclick="toggleAuthMode()">New here? Create account</p>
+        <div id="auth-modal" class="glass" style="display: none; position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%); padding: 3rem; border-radius: 2rem; z-index: 3000; width: 400px; background: white; box-shadow: 0 20px 40px rgba(0,0,0,0.2);">
+            <div style="display: flex; justify-content: space-between; margin-bottom: 1.5rem;">
+                <h2 id="auth-title">Login</h2>
+                <i class="fas fa-times" onclick="toggleAuth()" style="cursor: pointer; font-size: 1.2rem;"></i>
+            </div>
+            <input type="email" id="auth-email" placeholder="Email" style="width: 100%; padding: 1rem; border-radius: 1rem; border: 1px solid #ccc; margin-bottom: 1rem; outline: none;">
+            <input type="password" id="auth-password" placeholder="Password" style="width: 100%; padding: 1rem; border-radius: 1rem; border: 1px solid #ccc; margin-bottom: 1.5rem; outline: none;">
+            <button class="btn-primary" style="width: 100%;" onclick="handleAuth()">Continue</button>
+            <p style="text-align: center; margin-top: 1.5rem; cursor: pointer; color: var(--text-muted);" onclick="toggleAuthMode()">New here? Create account</p>
+        </div>
+
+        <!-- Checkout Success Modal -->
+        <div id="checkout-success-modal" class="glass" style="display: none; position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%); padding: 3rem; border-radius: 2rem; z-index: 3000; width: 400px; background: white; box-shadow: 0 20px 40px rgba(0,0,0,0.2); text-align: center;">
+            <div style="font-size: 4rem; color: #2ecc71; margin-bottom: 1rem;"><i class="fas fa-check-circle"></i></div>
+            <h2>Order Placed Successfully!</h2>
+            <p style="margin-top: 1rem; color: var(--text-muted);">Your transaction was processed. Tracking your delivery now.</p>
         </div>
     </main>
 
@@ -81,12 +94,20 @@
         <div id="cart-items" style="flex: 1; overflow-y: auto;">
             <!-- Loaded via JS -->
         </div>
-        <div id="cart-footer" style="padding-top: 2rem; border-top: 1px solid rgba(255,255,255,0.1);">
-            <div style="display: flex; justify-content: space-between; margin-bottom: 1.5rem;">
+        <div id="cart-footer" style="padding-top: 2rem; border-top: 1px solid rgba(0,0,0,0.1);">
+            <div style="margin-bottom: 1.5rem;">
+                <label style="display: block; margin-bottom: 0.5rem; font-size: 0.9rem; color: var(--text-muted);">Payment Method</label>
+                <select id="payment-mode" style="width: 100%; padding: 0.8rem; border-radius: 0.5rem; border: 1px solid #ccc; outline: none;">
+                    <option value="Credit Card">Credit Card</option>
+                    <option value="UPI">UPI / Google Pay</option>
+                    <option value="Cash on Delivery">Cash on Delivery</option>
+                </select>
+            </div>
+            <div style="display: flex; justify-content: space-between; margin-bottom: 1.5rem; font-weight: 800; font-size: 1.2rem;">
                 <span>Total</span>
                 <span id="cart-total">$0.00</span>
             </div>
-            <button class="btn-primary" style="width: 100%;" onclick="checkout()">Checkout</button>
+            <button class="btn-primary" style="width: 100%; font-size: 1.1rem; padding: 1rem;" onclick="checkout()">Place Order</button>
         </div>
     </div>
 

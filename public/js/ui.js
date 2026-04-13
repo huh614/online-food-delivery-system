@@ -57,7 +57,7 @@ function updateCartUI() {
 
     const itemsList = document.getElementById('cart-items');
     itemsList.innerHTML = cart.map((item, index) => `
-        <div style="display: flex; gap: 1rem; margin-bottom: 1.5rem; border-bottom: 1px solid rgba(255,255,255,0.05); padding-bottom: 1rem;">
+        <div style="display: flex; gap: 1rem; margin-bottom: 1.5rem; border-bottom: 1px solid rgba(0,0,0,0.05); padding-bottom: 1rem;">
             <img src="${item.image}" style="width: 60px; height: 60px; border-radius: 0.5rem; object-fit: cover;">
             <div style="flex: 1;">
                 <div style="display: flex; justify-content: space-between;">
@@ -65,10 +65,10 @@ function updateCartUI() {
                     <span>$${(item.price * item.quantity).toFixed(2)}</span>
                 </div>
                 <div style="display: flex; align-items: center; gap: 1rem; margin-top: 0.5rem;">
-                    <div class="glass" style="display: flex; align-items: center; border-radius: 0.5rem; overflow: hidden;">
-                        <button onclick="changeQty(${index}, -1)" style="background: none; border: none; color: white; padding: 0.2rem 0.5rem;">-</button>
-                        <span style="padding: 0 0.5rem;">${item.quantity}</span>
-                        <button onclick="changeQty(${index}, 1)" style="background: none; border: none; color: white; padding: 0.2rem 0.5rem;">+</button>
+                    <div class="glass" style="display: flex; align-items: center; border-radius: 0.5rem; overflow: hidden; border: 1px solid rgba(0,0,0,0.1);">
+                        <button onclick="changeQty(${index}, -1)" style="background: none; border: none; color: var(--text-main); padding: 0.2rem 0.5rem; cursor: pointer;">-</button>
+                        <span style="padding: 0 0.5rem; font-weight: 600;">${item.quantity}</span>
+                        <button onclick="changeQty(${index}, 1)" style="background: none; border: none; color: var(--text-main); padding: 0.2rem 0.5rem; cursor: pointer;">+</button>
                     </div>
                 </div>
             </div>
@@ -128,23 +128,24 @@ function renderOrders(orders) {
         <div class="card glass animate-in" style="padding: 1.5rem;">
             <div style="display: flex; justify-content: space-between; margin-bottom: 1rem;">
                 <h3>Order #${order.id}</h3>
-                <span class="glass" style="padding: 0.3rem 0.8rem; border-radius: 1rem; color: var(--primary); font-weight: 600;">
-                    ${order.status.toUpperCase()}
+                <span class="glass" style="padding: 0.3rem 0.8rem; border-radius: 1rem; color: var(--primary); font-weight: 600; background: rgba(226, 55, 68, 0.1); border: none;">
+                    ${(order.delivery_status || order.status).toUpperCase()}
                 </span>
             </div>
-            <p><strong>Restaurant:</strong> ${order.restaurant_name || 'N/A'}</p>
-            <p><strong>Total:</strong> $${order.total_amount.toFixed(2)}</p>
-            <p style="color: var(--text-muted); font-size: 0.8rem; margin-top: 1rem;">Placed on: ${new Date(order.date).toLocaleDateString()}</p>
+            <p style="margin-bottom: 0.5rem;"><strong>Restaurant:</strong> ${order.restaurant_name || 'N/A'}</p>
+            <p style="margin-bottom: 0.5rem;"><strong>Total:</strong> $${Number(order.total_amount).toFixed(2)}</p>
+            <p style="margin-bottom: 0.5rem;"><strong>Payment:</strong> ${order.pay_mode || 'Card'} <span style="color: green; font-size: 0.85em;">(Paid)</span></p>
+            <p style="color: var(--text-muted); font-size: 0.85rem; margin-top: 1rem;">Placed on: ${new Date(order.date).toLocaleString()}</p>
             
             <div style="margin-top: 1.5rem;">
-                <div style="height: 4px; background: rgba(255,255,255,0.1); border-radius: 2px; position: relative; overflow: hidden;">
-                    <div style="position: absolute; left: 0; top: 0; height: 100%; width: ${getStatusWidth(order.status)}%; background: var(--primary-gradient);"></div>
+                <div style="height: 6px; background: rgba(0,0,0,0.1); border-radius: 3px; position: relative; overflow: hidden;">
+                    <div style="position: absolute; left: 0; top: 0; height: 100%; width: ${getStatusWidth(order.delivery_status || order.status)}%; background: var(--primary-gradient); transition: width 1s ease-in-out;"></div>
                 </div>
-                <div style="display: flex; justify-content: space-between; font-size: 0.75rem; margin-top: 0.5rem; color: var(--text-muted);">
-                    <span>Placed</span>
-                    <span>Preparing</span>
-                    <span>Out for Delivery</span>
-                    <span>Delivered</span>
+                <div style="display: flex; justify-content: space-between; font-size: 0.8rem; margin-top: 0.8rem; color: var(--text-muted); font-weight: 500;">
+                    <span style="${getStatusWidth(order.delivery_status || order.status) >= 25 ? 'color: var(--primary);' : ''}">Placed</span>
+                    <span style="${getStatusWidth(order.delivery_status || order.status) >= 50 ? 'color: var(--primary);' : ''}">Preparing</span>
+                    <span style="${getStatusWidth(order.delivery_status || order.status) >= 75 ? 'color: var(--primary);' : ''}">On the Way</span>
+                    <span style="${getStatusWidth(order.delivery_status || order.status) >= 100 ? 'color: var(--primary);' : ''}">Delivered</span>
                 </div>
             </div>
         </div>
@@ -152,11 +153,10 @@ function renderOrders(orders) {
 }
 
 function getStatusWidth(status) {
-    switch(status) {
-        case 'pending': return 25;
-        case 'preparing': return 50;
-        case 'shipped': return 75;
-        case 'delivered': return 100;
-        default: return 25;
-    }
+    if (!status) return 25;
+    const lowerStatus = status.toLowerCase();
+    if (lowerStatus.includes('delivered')) return 100;
+    if (lowerStatus.includes('shipped') || lowerStatus.includes('way')) return 75;
+    if (lowerStatus.includes('preparing')) return 50;
+    return 25;
 }

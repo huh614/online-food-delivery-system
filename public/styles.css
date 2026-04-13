@@ -1,16 +1,17 @@
 @import url('https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600;800&display=swap');
 
 :root {
-    --primary: #FF4B2B;
-    --primary-gradient: linear-gradient(135deg, #FF4B2B 0%, #FF416C 100%);
-    --bg-dark: #0f0f0f;
-    --card-bg: rgba(255, 255, 255, 0.05);
-    --glass-bg: rgba(255, 255, 255, 0.1);
-    --text-main: #ffffff;
-    --text-muted: #b0b0b0;
-    --radius-lg: 2rem;
-    --radius-md: 1rem;
-    --shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.37);
+    --primary: #E23744;
+    --primary-gradient: linear-gradient(135deg, #E23744 0%, #FF5A60 100%);
+    --bg-dark: #f8f9fa; /* Using light theme for Zomato feel */
+    --card-bg: #ffffff;
+    --glass-bg: rgba(255, 255, 255, 0.95);
+    --text-main: #1c1c1c;
+    --text-muted: #696969;
+    --radius-lg: 1.5rem;
+    --radius-md: 0.8rem;
+    --shadow: 0 4px 12px 0 rgba(0, 0, 0, 0.05);
+    --shadow-hover: 0 8px 24px 0 rgba(0, 0, 0, 0.12);
     --transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
 }
 
@@ -18,7 +19,7 @@
     margin: 0;
     padding: 0;
     box-sizing: border-box;
-    font-family: 'Outfit', sans-serif;
+    font-family: 'Outfit', -apple-system, sans-serif;
 }
 
 body {
@@ -33,7 +34,7 @@ body {
     background: var(--glass-bg);
     backdrop-filter: blur(12px);
     -webkit-backdrop-filter: blur(12px);
-    border: 1px solid rgba(255, 255, 255, 0.1);
+    border: 1px solid rgba(0, 0, 0, 0.05); /* light border */
     box-shadow: var(--shadow);
 }
 
@@ -51,8 +52,8 @@ body {
 }
 
 .btn-primary:hover {
-    transform: translateY(-3px);
-    box-shadow: 0 10px 20px rgba(255, 75, 43, 0.3);
+    transform: translateY(-2px);
+    box-shadow: var(--shadow-hover);
 }
 
 /* --- Layout --- */
@@ -60,11 +61,12 @@ nav {
     display: flex;
     justify-content: space-between;
     align-items: center;
-    padding: 1.5rem 5%;
+    padding: 1.2rem 5%;
     position: fixed;
     top: 0;
     width: 100%;
     z-index: 1000;
+    border-bottom: 1px solid rgba(0,0,0,0.05); /* clean thin line */
 }
 
 .logo {
@@ -92,13 +94,15 @@ nav {
     color: var(--primary);
 }
 
-/* --- Hero Section --- */
 .hero {
-    height: 90vh;
+    min-height: 75vh;
     display: flex;
     align-items: center;
+    justify-content: center;
     padding: 0 5%;
-    background: radial-gradient(circle at 80% 20%, rgba(255, 75, 43, 0.15) 0%, transparent 40%);
+    background: linear-gradient(rgba(248, 249, 250, 0.9), rgba(248, 249, 250, 0.95)), url('https://images.unsplash.com/photo-1504674900247-0877df9cc836?w=1920&q=80') center/cover;
+    text-align: center;
+    margin-top: 70px;
 }
 
 .hero-content {
@@ -106,16 +110,21 @@ nav {
 }
 
 .hero-content h1 {
-    font-size: 4.5rem;
+    font-size: 4rem;
     line-height: 1.1;
     margin-bottom: 1.5rem;
+    font-weight: 800;
+    color: #1a1a1a;
+}
+
+.hero-content p {
+    font-size: 1.2rem;
+    color: var(--text-muted);
+    margin-bottom: 2rem;
 }
 
 .hero-content span {
-    background: var(--primary-gradient);
-    -webkit-background-clip: text;
-    background-clip: text;
-    -webkit-text-fill-color: transparent;
+    color: var(--primary);
 }
 
 /* --- Grid System --- */
@@ -135,12 +144,13 @@ nav {
     border-radius: var(--radius-lg);
     overflow: hidden;
     transition: var(--transition);
-    border: 1px solid rgba(255, 255, 255, 0.05);
+    border: 1px solid rgba(0, 0, 0, 0.05); /* light border */
+    box-shadow: var(--shadow);
 }
 
 .card:hover {
-    transform: translateY(-10px);
-    border-color: rgba(255, 75, 43, 0.3);
+    transform: translateY(-6px);
+    box-shadow: var(--shadow-hover);
 }
 
 .card-img {
@@ -160,10 +170,12 @@ nav {
     top: 0;
     width: 400px;
     height: 100vh;
-    background: rgba(15, 15, 15, 0.95);
+    background: rgba(255, 255, 255, 0.98);
     backdrop-filter: blur(20px);
     z-index: 2000;
     padding: 2rem;
+    border-left: 1px solid rgba(0,0,0,0.1);
+    box-shadow: -10px 0 30px rgba(0,0,0,0.05);
     transition: var(--transition);
 }
 
