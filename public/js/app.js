@@ -1,8 +1,9 @@
 /* =============================================
    APP.JS - Core Data, State & API Logic
+   Frontend-only mode: always uses local data.
    ============================================= */
 
-const API_BASE = 'http://localhost:3000/api';
+const API_BASE = null; // always use local fallback
 let currentUser = JSON.parse(localStorage.getItem('fr_user')) || null;
 let cart = [];
 let activeSort = 'recommended';
@@ -114,6 +115,7 @@ let appliedCoupon = null;
 
 // ===== API FETCH WITH FALLBACK =====
 async function apiFetch(endpoint, options = {}) {
+    if (!API_BASE) return fallback(endpoint, options);
     try {
         const res = await fetch(`${API_BASE}${endpoint}`, {
             ...options,
